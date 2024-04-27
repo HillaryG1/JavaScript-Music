@@ -20,7 +20,7 @@ const audioContext = new AudioContext();
   const bufferLength = analyser.frequencyBinCount;  // contains number of data values in the analyser data file
   const dataArray = new Uint8Array(bufferLength);
 
- const barWidth = canvas.width/bufferLength; //  barWidth = width of a single bar in the visualizer. bufferLenth = amount of details about frequencies that shows in the analyser sound file
+ const barWidth = (canvas.width/2)/bufferLength; //  barWidth = width of a single bar in the visualizer. bufferLenth = amount of details about frequencies that shows in the analyser sound file
 let barHeight; // let variable cause it will change value in response to the music
 let x;
 
@@ -28,12 +28,7 @@ function animate() {
   x = 0;
   ctx.clearRect(0,0, canvas.width, canvas.height); // clears entire canvas
   analyser.getByteFrequencyData(dataArray);
-  for (let i = 0; i < bufferLength; i++){
-    barHeight = dataArray[i] *2;
-    ctx.fillStyle = 'white';
-    ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-    x += barWidth;
-  }
+  drawVisualizer(bufferLength, x, barWidth, dataArray);
   requestAnimationFrame(animate);
 }
 animate();
@@ -54,7 +49,7 @@ file.addEventListener('change', function(){
   const bufferLength = analyser.frequencyBinCount;  // contains number of data values in the analyser data file
   const dataArray = new Uint8Array(bufferLength);
 
- const barWidth = canvas.width/bufferLength; //  barWidth = width of a single bar in the visualizer. bufferLenth = amount of details about frequencies that shows in the analyser sound file
+ const barWidth = (canvas.width/2)/bufferLength; //  barWidth = width of a single bar in the visualizer. bufferLenth = amount of details about frequencies that shows in the analyser sound file
 let barHeight; // let variable cause it will change value in response to the music
 let x;
 
@@ -62,7 +57,7 @@ function animate() {
   x = 0;
   ctx.clearRect(0,0, canvas.width, canvas.height); // clears entire canvas
   analyser.getByteFrequencyData(dataArray);
- 
+  drawVisualizer(bufferLength, x, barWidth, dataArray);
   requestAnimationFrame(animate);
 }
 animate();
@@ -70,9 +65,14 @@ animate();
 
 function drawVisualizer(bufferLength, x, barWidth, dataArray){
   for (let i = 0; i < bufferLength; i++){
-    barHeight = dataArray[i] *2;
-    ctx.fillStyle = 'white';
-    ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+    barHeight = dataArray[i];
+    ctx.save();
+    ctx.translate(canvas.width/2, canvas.height/2);
+    ctx.rotate(i * Math.PI * 2 / bufferLength);
+    ctx.fillStyle = 'rgb(' + red + ',' + green + ',' + blue + ')';
+    ctx.fillRect(0, 0, barWidth, barHeight);
     x += barWidth;
+    ctx.restore();
+
   }
 }
