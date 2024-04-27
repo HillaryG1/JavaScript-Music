@@ -16,7 +16,7 @@ const audioContext = new AudioContext();
   analyser = audioContext.createAnalyser(); // shows audio time & frequency data
   audioSource.connect(analyser);
   analyser.connect(audioContext.destination);   // default output device aka computer speakers
-  analyser.fftSize = 512; // number of audio samples wanted in the analszer data file
+  analyser.fftSize = 2048; // number of audio samples wanted in the analszer data file
   const bufferLength = analyser.frequencyBinCount;  // contains number of data values in the analyser data file
   const dataArray = new Uint8Array(bufferLength);
 
@@ -44,7 +44,7 @@ file.addEventListener('change', function(){
   analyser = audioContext.createAnalyser(); // shows audio time & frequency data
   audioSource.connect(analyser);
   analyser.connect(audioContext.destination);   // default output device aka computer speakers
-  analyser.fftSize = 512; // number of audio samples wanted in the analszer data file
+  analyser.fftSize = 2048; // number of audio samples wanted in the analszer data file
 
   const bufferLength = analyser.frequencyBinCount;  // contains number of data values in the analyser data file
   const dataArray = new Uint8Array(bufferLength);
@@ -70,8 +70,7 @@ function drawVisualizer(bufferLength, x, barWidth, dataArray){
     ctx.translate(canvas.width/2, canvas.height/2);
     ctx.rotate(i * Math.PI * 10 / bufferLength);
     const hue = i * 1;
-    ctx.fillStyle = 'hsl(' + hue + ',100%,' + (barHeight / 3) + '%)';
-
+    ctx.fillStyle = 'hsl(' + hue + ',100%,' + (barHeight / 4) + '%)';
     ctx.fillRect(0, 0, barWidth, barHeight);
     x += barWidth;
     ctx.restore();
