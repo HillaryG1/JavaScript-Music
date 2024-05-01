@@ -16,7 +16,7 @@ const audioContext = new AudioContext();
   analyser = audioContext.createAnalyser(); // shows audio time & frequency data
   audioSource.connect(analyser);
   analyser.connect(audioContext.destination);   // default output device aka computer speakers
-  analyser.fftSize = 2048; // number of audio samples wanted in the analszer data file
+  analyser.fftSize = 128; // number of audio samples wanted in the analszer data file
   const bufferLength = analyser.frequencyBinCount;  // contains number of data values in the analyser data file
   const dataArray = new Uint8Array(bufferLength);
 
@@ -44,7 +44,7 @@ file.addEventListener('change', function(){
   analyser = audioContext.createAnalyser(); // shows audio time & frequency data
   audioSource.connect(analyser);
   analyser.connect(audioContext.destination);   // default output device aka computer speakers
-  analyser.fftSize = 2048; // number of audio samples wanted in the analszer data file
+  analyser.fftSize = 128; // number of audio samples wanted in the analszer data file
 
   const bufferLength = analyser.frequencyBinCount;  // contains number of data values in the analyser data file
   const dataArray = new Uint8Array(bufferLength);
@@ -65,13 +65,15 @@ animate();
 
 function drawVisualizer(bufferLength, x, barWidth, dataArray){
   for (let i = 0; i < bufferLength; i++){
-    barHeight = dataArray[i] * 1.5;
+    barHeight = dataArray[i] * 1.4;
     ctx.save();
     ctx.translate(canvas.width/2, canvas.height/2);
-    ctx.rotate(i * Math.PI * 10 / bufferLength);
-    const hue = i * 1;
-    ctx.fillStyle = 'hsl(' + hue + ',100%,' + (barHeight / 4) + '%)';
-    ctx.fillRect(0, 0, barWidth, barHeight);
+    ctx.rotate(i * bufferLength * 4);
+    const hue = 250 + i * 2;
+    ctx.fillStyle = 'hsl(' + hue + ',100%, 50%)';
+    ctx.beginPath();
+    ctx.arc(0, barHeight, barHeight/10, 0, Math.PI * 2);
+    ctx.fill();
     x += barWidth;
     ctx.restore();
 
